@@ -1,0 +1,17 @@
+{
+  "name": "synology-uploader-frontend",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch"
+  },
+  "dependencies": {
+    "@uppy/core": "^6.0.2",
+    "@uppy/dashboard": "^6.0.0",
+    "@uppy/tus": "^6.0.0"
+  },
+  "devDependencies": {
+    "vite": "^8.3.1"
+  }
+}

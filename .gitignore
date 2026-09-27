@@ -1,0 +1,8 @@
+/vendor/
+/var/
+/build/
+/config/config.php
+/public/assets/
+/frontend/node_modules/
+/tests/e2e/node_modules/
+/.idea/workspace.xml

@@ -1,0 +1,11 @@
+{
+  "name": "synology-uploader-e2e",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "tus-js-client": "^4.3.1"
+  }
+}

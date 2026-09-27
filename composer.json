@@ -1,0 +1,36 @@
+{
+    "name": "firefox2100/synology-uploader",
+    "description": "Chunked, resumable (tus) file uploader for Synology DSM Web Station, authenticated via Synology SSO Server (OIDC).",
+    "type": "project",
+    "license": "GPL-3.0-or-later",
+    "require": {
+        "php": ">=8.2",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "jumbojett/openid-connect-php": "^1.0.2",
+        "symfony/polyfill-intl-normalizer": "^1.31"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "SynoUploader\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SynoUploader\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "platform": {
+            "php": "8.2.0"
+        },
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "scripts": {
+        "test": "phpunit"
+    }
+}
