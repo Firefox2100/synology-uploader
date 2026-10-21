@@ -47,7 +47,8 @@ final class Session
             'lifetime' => 0,
             'path' => $path,
             'domain' => '',
-            'secure' => $this->config->isHttps(),
+            // Local HTTP is supported for development; production HTTPS always sets Secure.
+            'secure' => $this->config->isHttps(), // NOSONAR: false is intentional only for an HTTP base_url.
             'httponly' => true,
             'samesite' => 'Lax',
         ]);

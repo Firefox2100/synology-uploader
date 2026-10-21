@@ -36,7 +36,7 @@ final class FilenameSanitizer
 
         $name = strtr($name, ['<' => '_', '>' => '_', ':' => '_', '"' => '_', '|' => '_', '?' => '_', '*' => '_']);
 
-        $name = (string) preg_replace('/^[\s.]+|[\s.]+$/u', '', $name);
+        $name = (string) preg_replace('/(?:^[\s.]+|[\s.]+$)/u', '', $name);
 
         if ($name === '' || in_array(strtolower($name), self::RESERVED, true)) {
             return null;

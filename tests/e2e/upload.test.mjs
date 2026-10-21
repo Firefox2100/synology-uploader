@@ -78,6 +78,16 @@ before(async () => {
   csrf = await login()
 })
 
+test('mock identity provider rejects unregistered redirect URIs', async () => {
+  const authorize = new URL('http://127.0.0.1:18081/authorize')
+  authorize.searchParams.set('redirect_uri', 'https://evil.example/callback')
+  assert.equal((await fetch(authorize, { redirect: 'manual' })).status, 400)
+
+  const logout = new URL('http://127.0.0.1:18081/logout')
+  logout.searchParams.set('post_logout_redirect_uri', 'https://evil.example/')
+  assert.equal((await fetch(logout, { redirect: 'manual' })).status, 400)
+})
+
 test('chunked upload arrives intact', async () => {
   const data = randomBytes(5 * CHUNK + 12345)
   const u = await upload(data, 'big file ü.bin')

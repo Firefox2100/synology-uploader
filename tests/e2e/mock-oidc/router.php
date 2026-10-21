@@ -28,6 +28,20 @@ $json = static function (array $data, int $status = 200): void {
     header('Content-Type: application/json');
     echo json_encode($data, JSON_UNESCAPED_SLASHES);
 };
+$redirect = static function (mixed $value) use ($json): string {
+    if (!is_string($value)) {
+        $json(['error' => 'invalid_request', 'error_description' => 'Missing redirect URI'], 400);
+        exit;
+    }
+
+    $parts = parse_url($value);
+    if (($parts['scheme'] ?? null) !== 'http' || ($parts['host'] ?? null) !== '127.0.0.1' || ($parts['port'] ?? null) !== 18080) {
+        $json(['error' => 'invalid_request', 'error_description' => 'Unregistered redirect URI'], 400);
+        exit;
+    }
+
+    return $value;
+};
 
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
@@ -61,14 +75,14 @@ switch ($path) {
             'client_id' => $_GET['client_id'] ?? '',
             'challenge' => $_GET['code_challenge'] ?? null,
         ]));
-        $target = $_GET['redirect_uri'] . '?' . http_build_query(['code' => $code, 'state' => $_GET['state'] ?? '']);
+        $target = $redirect($_GET['redirect_uri'] ?? null) . '?' . http_build_query(['code' => $code, 'state' => $_GET['state'] ?? '']);
         header('Location: ' . $target, true, 302);
         break;
 
     case '/logout':
         // Record the request so the e2e test can check the parameters, then go back.
         file_put_contents("$stateDir/last-logout.json", json_encode($_GET));
-        header('Location: ' . ($_GET['post_logout_redirect_uri'] ?? '/'), true, 302);
+        header('Location: ' . $redirect($_GET['post_logout_redirect_uri'] ?? null), true, 302);
         break;
 
     case '/last-logout':

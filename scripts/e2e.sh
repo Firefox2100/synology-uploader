@@ -12,9 +12,9 @@ E2E_ROOT="${E2E_ROOT:-/tmp/synoup-e2e}"
 NAME="synoup-e2e"
 
 rm -rf "$E2E_ROOT" && mkdir -p "$E2E_ROOT/dest"
-[ -d vendor ] || { echo "Run composer install first" >&2; exit 1; }
-[ -f public/assets/app.js ] || { echo "Run the frontend build first (cd frontend && npm ci && npm run build)" >&2; exit 1; }
-[ -d tests/e2e/node_modules ] || (cd tests/e2e && npm ci)
+[[ -d vendor ]] || { echo "Run composer install first" >&2; exit 1; }
+[[ -f public/assets/app.js ]] || { echo "Run the frontend build first (cd frontend && npm ci && npm run build)" >&2; exit 1; }
+[[ -d tests/e2e/node_modules ]] || (cd tests/e2e && npm ci --ignore-scripts)
 
 docker rm -f "$NAME" >/dev/null 2>&1 || true
 docker run -d --name "$NAME" --network host -u "$(id -u):$(id -g)" \
@@ -24,7 +24,7 @@ docker run -d --name "$NAME" --network host -u "$(id -u):$(id -g)" \
     php -S 127.0.0.1:18081 tests/e2e/mock-oidc/router.php >/dev/null 2>&1 &
     exec php -d display_errors=0 -S 127.0.0.1:18080 -t public tests/e2e/app-router.php' >/dev/null
 
-cleanup() { [ "${E2E_KEEP:-0}" = 1 ] || docker rm -f "$NAME" >/dev/null 2>&1 || true; }
+cleanup() { [[ "${E2E_KEEP:-0}" == 1 ]] || docker rm -f "$NAME" >/dev/null 2>&1 || true; }
 trap cleanup EXIT
 
 for _ in $(seq 1 50); do
